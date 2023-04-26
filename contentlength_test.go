@@ -36,13 +36,13 @@ func TestContentLength(t *testing.T) {
 
 func FuzzContentLength(f *testing.F) {
 	for l := 2; l <= 16; l++ {
-		f.Add("")
-		f.Add("\r\r")
-		f.Add("0\r0")
 		f.Add(strings.Repeat("A", l))
 		f.Add(base64.RawStdEncoding.EncodeToString([]byte(strings.Repeat("A", l))))
 		f.Add(base64.StdEncoding.EncodeToString([]byte(strings.Repeat("A", l))))
 	}
+	f.Add("")
+	f.Add("\r\r")
+	f.Add("0\r0")
 	f.Fuzz(func(t *testing.T, a string) {
 		result, e := base64.RawStdEncoding.DecodeString(a)
 		if e != nil {
